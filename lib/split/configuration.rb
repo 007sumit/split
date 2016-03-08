@@ -209,7 +209,7 @@ module Split
       @include_rails_helper = true
       @beta_probability_simulations = 10000
       @redis_url = ENV.fetch('REDIS_URL', 'localhost:6379')
-      @custom_override = proc{|experiment_name|}
+      @custom_override = nil
     end
 
     private

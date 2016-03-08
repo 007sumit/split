@@ -82,22 +82,25 @@ module Split
     end
 
     def override_present?(experiment_name)
-      custom_override_value = get_custom_override_value(experiment_name)
-      return custom_override_value if custom_override_value.present?
+      if Split.configuration.custom_override
+        return Split.configuration.custom_override.call(experiment_name)
+      end
       # Fetch from global params variable as fallback
       defined?(params) && params[experiment_name]
     end
 
     def override_alternative(experiment_name)
-      custom_override_value = get_custom_override_value(experiment_name)
-      return custom_override_value if custom_override_value.present?
+      if Split.configuration.custom_override
+        return Split.configuration.custom_override.call(experiment_name)
+      end
       # Fetch from global params variable as fallback
       params[experiment_name] if override_present?(experiment_name)
     end
 
     def split_generically_disabled?
-      custom_override_value = get_custom_override_value('SPLIT_DISABLE')
-      return custom_override_value if custom_override_value.present?
+      if Split.configuration.custom_override
+        return Split.configuration.custom_override.call('SPLIT_DISABLE')
+      end
       # Fetch from global params variable as fallback
       defined?(params) && params['SPLIT_DISABLE']
     end
